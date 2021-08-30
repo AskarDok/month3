@@ -1,19 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-{% load static %}
-<head>
-    <meta charset="UTF-8">
-    <title>INDEX</title>
-</head>
-<body style="text-align: center">
+{% extends 'layout.html' %}
+{% block content %}
     <h1>Hello, everyone. This is my little blog</h1>
 <div style="text-align: center">
     <form action="blog/" enctype="multipart/form-data">
 <ul>
     {% for i in posts %}
     <li>
-            <h3>{{ i.title }}</h3>
-            <p><img src="{{ i.image.url }}"></p>
+            <h3 style="font-size: 16px">{{ i.title }}</h3>
+            <p><img src="{{ i.image.url }}" width="500px" height="500px"></p>
             <p>{{ i.descr }}</p>
             <p>{{ i.hashtag }}</p>
     </li>
@@ -21,5 +15,4 @@
 </ul>
     </form>
     </div>
-</body>
-</html>
+{% endblock %}

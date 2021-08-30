@@ -1,13 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title><html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Add new post</title>
-</head>
-<body>
+{% extends "layout.html" %}
+{% block content %}
 <form action="/blog/create-post/" method="post" enctype="multipart/form-data" >
     {% csrf_token %}
     <p>
@@ -29,10 +21,4 @@
     </p>
         <input id="submit123" type="submit" value="Create Post">
 </form>
-</body>
-</html></title>
-</head>
-<body>
-
-</body>
-</html>
+{% endblock %}

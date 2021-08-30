@@ -9,14 +9,17 @@ from django.http import HttpResponse, FileResponse
 import random
 from .models import Student, Blog
 from django.shortcuts import redirect
+from django.views import generic
 
+class BlogView(generic.ListView):
+    template_name = 'index.html'
+    queryset = Blog.objects.all()
+    context_object_name = 'posts'
 
-
-def hello_view(request):
-    blog = Blog.objects.all()
-    context = {'posts': blog}
-    return render(request, 'index.html', context)
-
+class BlogDetailView(generic.ListView):
+    template_name = 'detail.html'
+    queryset = Blog.objects.all()
+    context_object_name = 'post'
 
 def date_view(request):
     today = datetime.now()
@@ -25,8 +28,9 @@ def date_view(request):
 
 def view_random(request):
     num = random.randint(1, 100)
-    context = {'num': num}
-    return render(request, 'random.html', context)
+    data = {'num': num,
+            'title': 'random numbers'}
+    return render(request, 'random.html', context=data)
 
 def image_view(request):
     path = settings.BASE_DIR / 'static' / '123.jpg'
@@ -35,8 +39,9 @@ def image_view(request):
 
 def view_students(request):
     students = Student.objects.all()
-    context = {'students': students}
-    return render(request, 'students.html', context)
+    data = {'students': students,
+            'title': 'sutdents',}
+    return render(request, 'students.html', context=data)
 
 
 
