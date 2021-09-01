@@ -1,11 +1,18 @@
 {% extends 'layout.html' %}
 {% block content %}
     <div>
-        <li>
-                <h3 style="font-size: 16px">{{ i.title }}</h3>
-                <p><img src="{{ post.image.url }}" width="500px" height="500px"></p>
-                <p>description: {{ post.descr }}</p>
-                <p>hashtag: {{ post.hashtag }}</p>
-        </li>
+            <h3 style="font-size: 16px">{{ post.title }}</h3>
+            <p><img src="{{ post.image.url }}" width="500px" height="500px"></p>
+            <p>description: {{ post.description }}<p>
+            <p>hashtag: {{ post.hashtags }}</p>
+        <div>
+            <h3>Comments:</h3>
+            <ul>
+                {% for i in comments %}
+                    <li>{{ i.text }}</li>
+                    <li>{{ i.datatime }}</li>
+                {% endfor %}
+            </ul>
+        </div>
     </div>
 {% endblock %}
