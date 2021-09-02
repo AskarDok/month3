@@ -1,0 +1,35 @@
+{% extends 'layout.html' %}
+{% block content %}
+    <div>
+
+        <form action="/users/registration/" method="post">
+            {% csrf_token %}
+            <p>
+            <label for="first_name">First name</label>
+            <input type="text" id="first_name" type="text">
+            </p>
+            <p>
+            <label for="second_name">Second name</label>
+            <input type="text" id="second_name" type="text">
+            </p>
+            <p>
+            <label for="email">Email </label>
+            <input type="text" id="email" type="text">
+            </p>
+            <p>
+            <label for="age">age</label>
+            <input id="age" type="text">
+            </p>
+            <p>
+            <label for="password1"> Password</label>
+            <input  id="password1" type="password">
+            </p>
+            <p>
+            <label for="password2"> rep Password</label>
+            <input  id="password2" type="password">
+            </p>
+            <input type="submit" value="register!">
+        </form>
+    </div>
+
+{% endblock %}

@@ -16,14 +16,7 @@ class BlogView(generic.ListView):
     template_name = 'index.html'
     queryset = Blog.objects.all()
     context_object_name = 'posts'
-    def create_comment(self, request):
-        if request.method == "POST":
-            form = request.POST
-            comment = form['comment']
-            Comment.objects.create(comment=comment)
-            return redirect('/blog/')
-        if request.method == "GET":
-            return render(self.request, 'index.html')
+
 
 # def blogViewData(request, blog_id):
 #     blogs = Blog.objects.get(id=blog_id)
@@ -36,7 +29,7 @@ class BlogView(generic.ListView):
 #     }
 #     return render(request, 'detail.html', context=data)
 
-class BlogDetailView(generic.ListView):
+class BlogDetailView(generic.DetailView):
     template_name = 'detail.html'
     queryset = Blog.objects.all()
     context_object_name = 'post'
@@ -52,7 +45,14 @@ class BlogDetailView(generic.ListView):
     def post(self, request, *args, **kwargs):
         pass
 
-
+def create_comment(request):
+    if request.method == "POST":
+        form = request.POST
+        comment = form['comment']
+        Comment.objects.create(comment=comment)
+        return redirect('/blog/')
+    if request.method == "GET":
+        return render(request, 'detail.html')
 
 
 

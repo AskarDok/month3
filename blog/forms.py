@@ -4,4 +4,6 @@ class BlogForm(forms.Form):
     title = forms.CharField(max_length=100)
     description = forms.CharField()
     hashtags = forms.CharField()
-    comments = forms.CharField(max_length=200)
+
+class CreateComment(forms.Form):
+    comment = forms.CharField(max_length=200)

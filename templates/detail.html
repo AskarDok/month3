@@ -13,6 +13,16 @@
                     <li>{{ i.datatime }}</li>
                 {% endfor %}
             </ul>
+
+
         </div>
+            <form action="/blog/" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                    <p>
+                        <label for="comments">Comment</label>
+                        <input id="comments" name="comments" type="text">
+                        <input id="submit123" type="submit" value="Create Comment">
+                    </p>
+            </form>
     </div>
 {% endblock %}
