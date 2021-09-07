@@ -1,24 +1,40 @@
 {% extends 'layout.html' %}
 {% block content %}
-    <h1>Hello, everyone. This is my little blog</h1>
-    <div style="text-align: center">
-        <ul>
-            {% for i in posts %}
-                <li>
-                        <a href="/blog/{{ i.id }}">{{ i.title }}</a>
-                        <p><img src="{{ i.image.url }}" width="500px" height="500px"></p>
-                        <p>{{ i.descr }}</p>
-                        <p>{{ i.hashtag }}</p>
-                </li>
+{% load static %}
 
-                    <p>
-                        <label for="comments">Comment</label>
-                        <input id="comments" name="comments" type="text">
-                        <input id="submit123" type="submit" value="Create Comment">
-                    </p>
 
-            {% endfor %}
-        </ul>
-
+<div style="text-align:center">
+    {% if request.user.is_authenticated %}
+            <span>
+                <h1>Hi! {{ request.user.first_name }}</h1>
+            </span>
+            <span>
+                <a href="/blog/create-post/">Add post</a>
+            </span>
     </div>
+    {% else %}
+    <p><a href="/users/login/">Login here</a></p>
+
+    {% endif %}
+<div style="text-align: center">
+    <form action="/blog/" enctype="multipart/form-data">
+<ul>
+    {% for i in posts %}
+    <li>
+        <a href="/blog/{{ i.id }}">
+        <h3>{{ i.title }}</h3>
+        </a>
+            <p><img src="{{ i.image.url }}" height="500px", width="500px"></p>
+            <p>{{ i.descr }}</p>
+            <p>{{ i.hashtag }}</p>
+            <p>{{ i.comments }}</p>
+
+
+
+    </li>
+    {% endfor %}
+</ul>
+    </form>
+    </div>
+
 {% endblock %}

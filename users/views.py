@@ -1,10 +1,15 @@
-from django.http import HttpResponse
-from django.shortcuts import render
-from django.views.generic import CreateView
+from django.contrib.auth import login, logout, authenticate
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render, redirect
+
+
+from allauth.account.views import LoginView
+
+# Create your views here.
 from .models import BlogUser
 
 
-def registerView(request):
+def register_view(request):
     if request.method == 'GET':
         return render(request, 'registration.html')
     if request.method == 'POST':
@@ -12,12 +17,41 @@ def registerView(request):
         last_name = request.POST['last_name']
         age = request.POST['age']
         email = request.POST['email']
-        password1 = request.POST['password1']
+        password = request.POST['password']
         password2 = request.POST['password2']
 
-        if password1 != password2:
-            return HttpResponse('Passwords does not match')
+        if password != password2:
+            return HttpResponse("Passwords does not match!")
+
         user = BlogUser.objects.create_user(username=email, first_name=first_name,
-                                            last_name=last_name, age=age, email=email,
-                                            password1=password1)
-        return HttpResponse('registered')
+                                            last_name=last_name, email=email, age=age,  password=password)
+
+        return HttpResponse("Registered successfully!")
+
+
+def logout_view(request):
+    if request.method == 'POST':
+        if request.user.is_authenticated:
+            logout(request.user)
+        return HttpResponseRedirect('/login/')
+    if request.method == 'GET':
+        return render(request, 'logout.html')
+
+
+
+def login_view(request):
+    if request.method == 'GET':
+        return render(request, 'login.html')
+    if request.method == 'POST':
+        email = request.POST['email']
+        password = request.POST['password']
+        user = authenticate(request, email=email, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('/blog/')
+
+        return render(request, 'login.html', context={"message": "Ne pravilnyi login ili parol"})
+
+
+class MyLoginView(LoginView):
+    template_name = 'login.html'

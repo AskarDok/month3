@@ -1,15 +1,15 @@
-import random
 
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 # Create your views here.
 from datetime import datetime
 from django.conf import settings
-from django.http import HttpResponse, FileResponse
+from django.http import HttpResponse, FileResponse, HttpResponseRedirect
 import random
 from .models import *
-from django.shortcuts import redirect
 from django.views import generic
+from .forms import *
+from rest_framework.generics import ListAPIView
 
 
 class BlogView(generic.ListView):
@@ -18,41 +18,30 @@ class BlogView(generic.ListView):
     context_object_name = 'posts'
 
 
-# def blogViewData(request, blog_id):
-#     blogs = Blog.objects.get(id=blog_id)
-#     data = {
-#         'title': Blog.title,
-#         'post': blogs,
-#         'descr': Blog.description,
-#         'hash': Blog.hashtags,
-#         'image': Blog.image,
-#     }
-#     return render(request, 'detail.html', context=data)
 
-class BlogDetailView(generic.DetailView):
+
+class BlogDetailView(generic.DetailView, generic.CreateView):
+    form_class = CreateComment
     template_name = 'detail.html'
     queryset = Blog.objects.all()
     context_object_name = 'post'
+    extra_context = {"comments": Comment.objects.all()}
 
-    def get_context_data(self, **kwargs):
+    def get_context_data(self, *args, **kwargs):
         context = super(BlogDetailView, self).get_context_data(**kwargs)
         blog_id = self.kwargs['pk']
-        comments = Comment.objects.filter(blog_id=blog_id)
-        context['comments'] = comments
+        commenta = Comment.objects.filter(blog_id=blog_id)
+        context['comments'] = commenta
         return context
 
 
-    def post(self, request, *args, **kwargs):
-        pass
 
-def create_comment(request):
-    if request.method == "POST":
-        form = request.POST
-        comment = form['comment']
-        Comment.objects.create(comment=comment)
-        return redirect('/blog/')
-    if request.method == "GET":
-        return render(request, 'detail.html')
+    def post(self, request, **kwargs):
+        if request.method == "POST":
+            form = self.request.POST
+            comment = form['comments']
+            Comment.objects.create(text=comment, blog_id=self.kwargs['pk'])
+            return HttpResponseRedirect('/blog/')
 
 
 
@@ -94,3 +83,7 @@ def create_post(request):
         return redirect('/blog/')
     if request.method == "GET":
         return render(request, 'create.html')
+
+class BlogListApiView(ListAPIView):
+    queryset = Blog.objects.all()
+    serializer_class = BlogSerializer
