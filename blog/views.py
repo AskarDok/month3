@@ -17,6 +17,14 @@ class BlogView(generic.ListView):
     queryset = Blog.objects.all()
     context_object_name = 'posts'
 
+    # def get_queryset(self):
+    #     qs = super(BlogView, self).get_queryset()
+    #     start_date = self.request.GET.get('start_date', None)
+    #     end_date = self.request.GET.get('end_date', None)
+    #     search = self.request.GET.get('search', '')
+    #     # if start_date and end_date:
+    #     #     qs = qs.filter(date__gte=start_date, date__gte=end_date)
+
 
 
 
