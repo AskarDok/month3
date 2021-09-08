@@ -1,11 +1,3 @@
 {% extends 'layout.html' %}
-{%  block content %}
-    <form action="/blog/", method="post">
-        {% csrf_token %}
-{#    {% if request.user.is_authenticated %}#}
-          <label>
-          <input name="submit2" type="submit" id="submit2" value="log out">
-          </label>
-{#    {% endif %}#}
-    </form>
+{% block content %}
 {% endblock %}

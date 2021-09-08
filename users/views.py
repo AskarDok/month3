@@ -2,6 +2,7 @@ from django.contrib.auth import login, logout, authenticate
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 
+from django.views import generic
 
 from allauth.account.views import LoginView
 
@@ -32,25 +33,28 @@ def register_view(request):
 def logout_view(request):
     if request.method == 'POST':
         if request.user.is_authenticated:
-            logout(request.user)
-        return HttpResponseRedirect('/login/')
+            logout(request)
+        return HttpResponseRedirect('/users/login/')
     if request.method == 'GET':
-        return render(request, 'logout.html')
+        return render(request, 'layout.html')
 
 
+class Gog_log(generic.TemplateView):
+    template_name = 'login.html'
 
-def login_view(request):
-    if request.method == 'GET':
-        return render(request, 'login.html')
-    if request.method == 'POST':
-        email = request.POST['email']
-        password = request.POST['password']
-        user = authenticate(request, email=email, password=password)
-        if user is not None:
-            login(request, user)
-            return redirect('/blog/')
+    def login_view(self, request):
+        if self.request.method == 'GET':
+            return render(self.request, 'login.html')
+        if self.request.method == 'POST':
+            email = self.request.POST['email']
+            password = self.request.POST['password']
+            user = authenticate(self.request, email=email, password=password)
+            if user is not None:
+                login(self.request, user)
+                return HttpResponseRedirect('/blog/')
 
-        return render(request, 'login.html', context={"message": "Ne pravilnyi login ili parol"})
+            return render(self.request, 'login.html', context={"message": "Ne pravilnyi login ili parol"})
+
 
 
 class MyLoginView(LoginView):
