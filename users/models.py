@@ -4,8 +4,7 @@ from django.db import models
 
 
 class BlogUser(AbstractUser):
-    age = models.IntegerField()
     email = models.EmailField(unique=True)
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username', 'age']
+    REQUIRED_FIELDS = ['username']
