@@ -32,7 +32,7 @@ class BlogView(generic.ListView):
 
 
 
-class BlogDetailView(generic.DetailView, generic.CreateView, generic.ListView):
+class BlogDetailView(generic.DetailView, generic.CreateView):
     form_class = CreateComment
     template_name = 'detail.html'
     queryset = Blog.objects.all()
@@ -42,11 +42,10 @@ class BlogDetailView(generic.DetailView, generic.CreateView, generic.ListView):
     def get_context_data(self, *args, **kwargs):
         context = super(BlogDetailView, self).get_context_data(**kwargs)
         blog_id = self.kwargs['pk']
-        commenta = Comment.objects.filter(blog_id=blog_id)
+        commenta = Comment.objects.filter(blog_id=blog_id).order_by('-datatime')
         context['comments'] = commenta
+
         return context
-
-
 
     def post(self, request, **kwargs):
         if request.method == "POST":
@@ -54,16 +53,6 @@ class BlogDetailView(generic.DetailView, generic.CreateView, generic.ListView):
             comment = form['comments']
             Comment.objects.create(text=comment, blog_id=self.kwargs['pk'])
             return HttpResponseRedirect('/blog/')
-
-    def get_queryset(self):
-        qs = super(BlogDetailView, self).get_queryset()
-        start_date = self.request.GET.get('start_date', None)
-        end_date = self.request.GET.get('end_date', None)
-        if start_date and end_date:
-            qs = qs.filter(datatime__gte=start_date, datatime__lte=end_date)
-            return qs
-
-
 
 
 def date_view(request):
